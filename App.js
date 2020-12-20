@@ -8,10 +8,11 @@ import {
   ScrollView,
   TextInput,
   Modal,
-  Alert,
-  FlatList,
+  Alert
 } from 'react-native';
 
+
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -80,6 +81,8 @@ this.setState({history: newlist})
   render() {
     return (
       <View style={styles.container}>
+
+<View>
       <Text style={{ 
    font: "Trebuchet MS",
    fontSize: 32.5,
@@ -93,6 +96,7 @@ this.setState({history: newlist})
    textTransform: "uppercase"
    
    }}>DISCOUNT APP</Text>
+   </View>
         <View style={styles.input}>
           <TextInput
             keyboardType={'number-pad'}
@@ -129,21 +133,34 @@ this.setState({history: newlist})
           </Text>
         </View>
 
-        <View style={{ padding: 10 }}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('History', {input1: this.state.input1,
+        <View  >
+          
+        
+
+      
+     {
+    this.props.navigation.setOptions({
+      headerRight: () => (
+        <View style={{ paddingRight: 20 }}>
+        <FontAwesome
+          name="history"
+          size={25}
+          color="black"
+     
+         onPress={() => this.props.navigation.navigate('History', {input1: this.state.input1,
       input2: this.state.input2,
       amount_saved: this.state.amount_saved,
       disc_amount: this.state.disc_amount,
       history: this.state.history,
       removed:this.removeitem}
-      )}
-            style={styles.history}>
-            <Text style={{ fontSize: 18, color: 'white' }}>HISTORY</Text>
-          </TouchableOpacity>
-        </View>
-
+      )} />
       </View>
+      ),
+    })
+  }
+</View>
+</View>
+
 
     );
   }
@@ -155,9 +172,14 @@ this.setState({history: newlist})
 constructor(props) {
     super(props);
     this.state = {
-    modalview:true
+    modalview:true,
+  hist:this.props.route.params.history
     }
 }
+
+ clearhistory(){
+    {this.props.route.params.history[""]}
+  }
 
   render() {
    
@@ -172,7 +194,11 @@ constructor(props) {
             Alert.alert('Modal has been closed.');
           }}>
           <View>
+          
             <View style={styles.mdisplay}>
+            
+        <Button style={{ fontSize:15}} onPress={()=>this.clearhistory()} title="clear" color='#800080'></Button>
+      
               <Text style={styles.mhead}>Discount History</Text>
               <Text style={{ fontSize: 18 }}>
                 Original Price | Discount% | Final Price
@@ -183,24 +209,33 @@ constructor(props) {
                   {this.props.route.params.history.map((item) => (
                     <View style={{flexDirection:"row"}}>
                     <TouchableOpacity style={styles.scrollstyle}>
-                    <Text
+                    <Text style= {{fontSize:23}}
                       >
                       {item.data}
                     </Text>
-                  </TouchableOpacity>
                   
-                  <TouchableOpacity
+                  </TouchableOpacity>
+                  <View>
+                  <TouchableOpacity style={{
+                        
+                        backgroundColor:"grey",
+                        borderRadius:100,
+                        marginLeft:8,
+                        marginTop:4
+
+                        }}
                   onPress={()=>this.props.route.params.removed(this.props.route.params.history.key)}>
                   <Text style={{
-                        fontSize: 25,
-                        width:"45%",
                         color: 'red',
-                        backgroundColor:"black",
-                        borderRadius:"25%"
+                        fontSize: 25,
+                        padding:4,
+
                         
+                            
                   }}> x </Text>
-                  </TouchableOpacity>
                   
+                  </TouchableOpacity>
+                  </View>
                   </View>
                   
                   ))}
@@ -263,11 +298,13 @@ const styles = StyleSheet.create({
   },
 
 scrollstyle:{
-borderRadius:"15%",
-padding:"10%",
+borderRadius:20,
+borderColor: '#20232a',
+backgroundColor:"pink",
+padding:8,
+marginBottom:10
 
 },
-
 
   input: {
     height: 45,
@@ -302,14 +339,7 @@ padding:"10%",
     marginLeft: 10,
   },
 
-  history: {
-    height: 50,
-    width: 130,
-    backgroundColor: '#708090',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-  },
+
   results: {
     padding: '3%',
     backgroundColor: '#AFEEEE',
